@@ -7,7 +7,7 @@ interface IRowProps {
   onUpdate: (index: number) => void;
 }
 
-class Row extends React.Component<IRowProps> {
+class Row extends React.PureComponent<IRowProps> {
   renderCount = 0;
 
   handleUpdate = () => {
@@ -58,7 +58,13 @@ export default class App extends React.Component<
   }
 
   handleUpdate = (index: number) => {
-    this.state.list[index].value = App.generateValue();
+    this.setState(({ list }) => {
+      const newList = list.map((item, i) => {
+        return i === index ? { ...item, value: App.generateValue() } : item;
+      });
+
+      return { list: newList };
+    });
   };
 
   render() {
